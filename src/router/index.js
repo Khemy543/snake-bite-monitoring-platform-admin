@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import Home from '../views/Home'
+// layouts
+import Auth from '../layouts/Auth.vue'
 
 const routes = [
   {
@@ -10,7 +11,7 @@ const routes = [
     },
     path: '/',
     name: 'home',
-    component: Home
+    component: () => import('../views/Home')
   },
   {
     meta: {
@@ -56,13 +57,20 @@ const routes = [
     component: () => import(/* webpackChunkName: "responsive" */ '../views/Responsive')
   },
   {
-    meta: {
-      title: 'Login',
-      fullScreen: true
-    },
-    path: '/login',
-    name: 'login',
-    component: () => import(/* webpackChunkName: "login" */ '../views/Login')
+    path: '/auth',
+    component: Auth,
+    name: 'auth',
+    children: [
+      {
+        meta: {
+          title: 'Login',
+          fullScreen: true
+        },
+        path: 'login',
+        name: 'login',
+        component: () => import(/* webpackChunkName: "login" */ '../views/Login')
+      }
+    ]
   },
   {
     meta: {

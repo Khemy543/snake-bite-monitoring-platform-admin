@@ -5,10 +5,12 @@ import router from './router'
 import store from './store'
 
 import './css/main.css'
+import API from './directives/axios'
+import VueCookies from 'vue3-cookies'
 
 /* Fetch sample data */
-store.dispatch('fetch', 'clients')
-store.dispatch('fetch', 'history')
+/* store.dispatch('fetch', 'clients')
+store.dispatch('fetch', 'history') */
 
 /* Dark mode */
 // store.dispatch('darkMode')
@@ -33,5 +35,10 @@ router.afterEach(to => {
   /* Full screen mode */
   store.dispatch('fullScreenToggle', !!to.meta.fullScreen)
 })
-
-createApp(App).use(store).use(router).mount('#app')
+const app = createApp(App)
+app.use(store)
+app.use(router)
+app.use(VueCookies)
+app.config.globalProperties.$axios = API
+app.mount('#app')
+// createApp(App).use(store).use(router).mount('#app')

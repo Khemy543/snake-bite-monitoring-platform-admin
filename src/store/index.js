@@ -1,5 +1,4 @@
 import { createStore } from 'vuex'
-import axios from 'axios'
 
 export default createStore({
   state: {
@@ -77,30 +76,6 @@ export default createStore({
         key: 'darkMode',
         value
       })
-    },
-
-    fetch ({ commit }, payload) {
-      axios
-        .get(`data-sources/${payload}.json`)
-        .then((r) => {
-          if (r.data) {
-            if (r.data.data) {
-              commit('basic', {
-                key: payload,
-                value: r.data.data
-              })
-            }
-            if (r.data.status) {
-              commit('basic', {
-                key: `${payload}Status`,
-                value: r.data.status
-              })
-            }
-          }
-        })
-        .catch(error => {
-          alert(error.message)
-        })
     }
   },
   modules: {
