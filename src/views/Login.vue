@@ -1,13 +1,13 @@
 <template>
   <full-screen-section bg="login" v-slot="{ cardClass, cardRounded }">
-    <card-component  :class="cardClass" :rounded="cardRounded" @submit.prevent="submit" form>
+    <card-component  :class="cardClass" :rounded="cardRounded" @submit.prevent="handleLogin" form>
 
       <field label="Login" help="Please enter your login">
-        <control v-model="form.login" :icon="mdiAccount" name="login" autocomplete="username"/>
+        <control v-model="form.email" :icon="mdiAccount" name="login" autocomplete="username"/>
       </field>
 
       <field label="Password" help="Please enter your password">
-        <control v-model="form.pass" :icon="mdiAsterisk" type="password" name="password" autocomplete="current-password"/>
+        <control v-model="form.password" :icon="mdiAsterisk" type="password" name="password" autocomplete="current-password"/>
       </field>
 
       <check-radio-picker name="remember" v-model="form.remember" :options="{ remember: 'Remember' }" />
@@ -23,8 +23,6 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
-import { useRouter } from 'vue-router'
 import { mdiAccount, mdiAsterisk } from '@mdi/js'
 import FullScreenSection from '@/components/FullScreenSection'
 import CardComponent from '@/components/CardComponent'
@@ -34,6 +32,7 @@ import Control from '@/components/Control'
 import Divider from '@/components/Divider.vue'
 import JbButton from '@/components/JbButton'
 import JbButtons from '@/components/JbButtons'
+import API from '../plugins/axios'
 
 export default {
   name: 'Login',
@@ -47,24 +46,27 @@ export default {
     JbButton,
     JbButtons
   },
-  setup () {
-    const form = reactive({
-      login: 'john.doe',
-      pass: 'very-secret-password-fYjUw-',
-      remember: ['remember']
-    })
-
-    const router = useRouter()
-
-    const submit = () => {
-      router.push('/')
-    }
-
+  data () {
     return {
-      form,
-      submit,
+      form: {},
       mdiAccount,
       mdiAsterisk
+    }
+  },
+  methods: {
+    async handleLogin () {
+      try {
+        const response = await API.post('auth/login', {
+          email: this.form.email,
+          password: this.form.password
+        })
+
+        if (response) {
+          this.$cookies.set('authToken', response.data.access_token)
+        }
+      } catch (error) {
+
+      }
     }
   }
 }

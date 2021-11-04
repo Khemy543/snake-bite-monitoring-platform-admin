@@ -5,7 +5,7 @@ import router from './router'
 import store from './store'
 
 import './css/main.css'
-import API from './directives/axios'
+import API from './plugins/axios'
 import VueCookies from 'vue3-cookies'
 
 /* Fetch sample data */
